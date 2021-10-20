@@ -8,7 +8,7 @@ class SimpleStockMarket:
     stockrecords = pd.read_csv("Stockrecords.csv")
     stockrecords["Stock Symbol"] = stockrecords["Stock Symbol"].str.strip()
     stockrecords["Type"] = stockrecords["Type"].str.strip()
-    stockrecords['Fixed Dividend']=str(stockrecords['Fixed Dividend']).replace('%','')
+    #stockrecords["Fixed Dividend"]=str(stockrecords["Fixed Dividend"]).replace('%','')
 
     def __init__(self):
         pass
@@ -20,13 +20,13 @@ class SimpleStockMarket:
             if str(stocksymbol) in list(SimpleStockMarket.stockrecords["Stock Symbol"]):
                 stocktype = list(SimpleStockMarket.stockrecords[SimpleStockMarket.stockrecords["Stock Symbol"]==str(stocksymbol)]["Type"])
                 if 'Common' in stocktype:
-                    lastDividend = float(SimpleStockMarket.stockrecords[SimpleStockMarket.stockrecords["Stock Symbol"]==str(stocksymbol)]['Last Dividend'])
+                    lastDividend = float(SimpleStockMarket.stockrecords[SimpleStockMarket.stockrecords["Stock Symbol"]==str(stocksymbol)]["Last Dividend"])
                     divyield = lastDividend/float(price)
                     return divyield
                 elif 'Preferred' in stocktype:
-                    fixedDividend = float(SimpleStockMarket.stockrecords[SimpleStockMarket.stockrecords["Stock Symbol"]==str(stocksymbol)]['Fixed Dividend'])
+                    fixedDividend = list(SimpleStockMarket.stockrecords[SimpleStockMarket.stockrecords["Stock Symbol"]==str(stocksymbol)]["Fixed Dividend"])[0].replace('%','')
                     parValue = float(SimpleStockMarket.stockrecords[SimpleStockMarket.stockrecords["Stock Symbol"]==str(stocksymbol)]['Par Value'])
-                    divyield = (fixedDividend*parValue)/float(price)
+                    divyield = (float(fixedDividend)*parValue)/float(price)
                     return divyield
                 else:
                     return 'Stock Type is not matched with the stock type of given stock'
